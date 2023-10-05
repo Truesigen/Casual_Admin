@@ -14,11 +14,7 @@ spl_autoload_register(function ($class) {
         include ROOT_PATH.'src/validateRules/'.$class.'.php';
     }
 });
-//require_once ROOT_PATH.'src/Controller.php';
-//require_once ROOT_PATH.'src/Template.php';
-//require_once ROOT_PATH.'src/DatabaseConnection.php';
-//require_once ROOT_PATH.'src/Entity.php';
-//require_once ROOT_PATH.'src/Routes.php';
+
 require_once ROOT_PATH.'model/page.php';
 require_once ROOT_PATH.'admin/model/user.php';
 

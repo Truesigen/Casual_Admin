@@ -13,19 +13,6 @@ spl_autoload_register(function ($class) {
 });
 
 require_once ROOT_PATH.'src/validatorInterface.php';
-/**require_once(ROOT_PATH . 'src/controller.php');
-require_once(ROOT_PATH . 'src/template.php');
-require_once(ROOT_PATH . 'src/dbConnection.php');
-require_once(ROOT_PATH . 'src/entity.php');
-require_once(ROOT_PATH . 'src/router.php');
-require_once(ROOT_PATH . 'src/auth.php');
-require_once(ROOT_PATH . 'src/validation.php');
-require_once(ROOT_PATH . 'src/validateRules/ValidateNoEmptySpaces.php');
-require_once(ROOT_PATH . 'src/validateRules/ValidateMinimum.php');
-require_once(ROOT_PATH . 'src/validateRules/ValidateEmail.php');
-require_once(ROOT_PATH . 'src/validateRules/ValidateMaximum.php');
-require_once(ROOT_PATH . 'src/validateRules/ValidateSpecialCharacters.php');
- */
 require_once ROOT_PATH.'model/page.php';
 require_once ROOT_PATH.'admin/model/user.php';
 
