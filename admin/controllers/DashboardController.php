@@ -18,7 +18,7 @@ class DashboardController extends Controller
 
       public function defaultAction()
       {
-          $this->template->view('page-list', []);
+          $this->template->view('static_page', []);
 
           exit();
       }
