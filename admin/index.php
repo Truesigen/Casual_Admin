@@ -30,7 +30,7 @@ require_once ROOT_PATH.'model/page.php';
 require_once ROOT_PATH.'admin/model/user.php';
 
 //database connection
-DatabaseConnection::connect('127.0.0.1:3306', 'crm', 'root', 'zero1019');
+DatabaseConnection::connect();
 $dbh = DatabaseConnection::getInstance();
 $dbc = $dbh->getConnection();
 

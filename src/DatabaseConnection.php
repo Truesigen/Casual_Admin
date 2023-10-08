@@ -29,11 +29,11 @@ final class DatabaseConnection
      {
      }
 
-    public static function connect($host, $dbName, $user, $password)
+    public static function connect()
     {
         /* Подключение к базе данных MySQL с помощью вызова драйвера */
 
-        self::$connection = new PDO("mysql:dbname=$dbName;host=$host", $user, $password);
+        self::$connection = new PDO('mysql:dbname=crm;host=127.0.0.1:3306', 'root', 'zero1019');
     }
 
     public static function getConnection()

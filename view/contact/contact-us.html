@@ -4,9 +4,9 @@ echo $pageObj->title;
 echo '</br>';
 echo $pageObj->content;
 ?>
-<form method="POST" action="/contact">
-    <input type="hidden" name="action" value="submitContactForm"/>
-    <input type="text" name="name" placeholder="name"/>
-    <input type="text" name="email" placeholder="email"/>
+<form method="POST" action="/contacted">
+    <input type="hidden" name="action" value="submitContactForm" />
+    <input type="text" name="name" placeholder="name" />
+    <input type="text" name="email" placeholder="email" />
     <button value="sumbit">Send</button>
 </form>
