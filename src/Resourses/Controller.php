@@ -48,7 +48,7 @@ abstract class Controller
         $this->routes = $routes;
     }
 
-    public function runAction($actionName = 'default')
+    public function runAction(string $actionName = 'default')
     {
         if (method_exists($this, 'runBeforeAction')) {
             $result = $this->runBeforeAction();

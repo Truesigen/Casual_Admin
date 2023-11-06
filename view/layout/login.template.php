@@ -27,29 +27,46 @@
 		<div class="templatemo-content-widget templatemo-login-widget white-bg">
 			<header class="text-center">
 	          <div class="square"></div>
-	          <h1>Visual Admin</h1>
+	          <h1>Casual Admin</h1>
 	        </header>
-	        <form action="/logging" method="post" class="templatemo-login-form">
+	        <form action="/login" method="post" class="templatemo-login-form">
 	        	<div class="form-group">
 	        		<div class="input-group">
 		        		<div class="input-group-addon"><i class="fa fa-user fa-fw"></i></div>	        		
 		              	<input type="text" name="name" class="form-control" placeholder="js@dashboard.com">           
-		          	</div>	
+		          	</div>
+					<div class="danger" style="color:red;" >
+				<?php
+                if (isset($_SESSION['name'])) {
+                    echo reset($_SESSION['name']);
+                    unset($_SESSION['name']);
+                }
+				?>
+					</div>	
 	        	</div>
 	        	<div class="form-group">
 	        		<div class="input-group">
 		        		<div class="input-group-addon"><i class="fa fa-key fa-fw"></i></div>	        		
 		              	<input type="password" name="password" class="form-control" placeholder="******">           
 		          	</div>	
+					<div class="danger" style="color:red;">
+					<?php
+				if (isset($_SESSION['password'])) {
+				    echo reset($_SESSION['password']);
+				    unset($_SESSION['password']);
+				}
+				?>
+					</div>
 	        	</div>	          	
-	          	<div class="form-group">
-				    <div class="checkbox squaredTwo">
-				        <input type="checkbox" id="c1" name="cc" />
-						<label for="c1"><span></span>Remember me</label>
-				    </div>				    
-				</div>
+	          	
 				<div class="form-group">
 					<button type="submit" class="templatemo-blue-button width-100">Login</button>
+				</div>
+				<div class="danger" style="color:red;">
+					<?php if (isset($_SESSION['auth_error'])) {
+					    echo $_SESSION['auth_error'];
+					    unset($_SESSION['auth_error']);
+					} ?>
 				</div>
 	        </form>
 		</div>

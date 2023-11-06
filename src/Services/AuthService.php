@@ -1,34 +1,31 @@
 <?php
 
-class Auth
-{
-    /**
-     * Class for authentication. Check login, change pass, etc.
-     */
-    public function checkLogin($username, $password)
-    {
-        $dbh = DatabaseConnection::getInstance();
-        $dbc = $dbh->getConnection();
+namespace App\Services;
 
-        $userObj = new User($dbc);
-        $userObj->findBy('username', $username);
+use App\Resourses\EntityInterface;
+
+class AuthService
+{
+    private EntityInterface $user;
+
+    public function __construct(EntityInterface $user)
+    {
+        $this->user = $user;
+    }
+
+    public function checkLogin(string $username, string $password): int|false
+    {
+        $userObj = $this->user->first('name', $username);
 
         if (property_exists($userObj, 'id')) {
-            //if($userObj->password == md5($password . ENCRYPTION_HASH . $userObj->password_hash)){
-            if (password_verify($password, $userObj->password)) {
-                return true;
-            }
+            return password_verify($password, $userObj->password) ? $userObj->id : false;
         }
+
+        return false;
     }
 
     public function changeUserPassword($userObj, $newPassword)
     {
-        //$tmp = date('YmdHis') . 'secret_string123123';
-        //$hash = md5($tmp);
-        //$hashedPassword = md5($newPassword . ENCRYPTION_HASH . $hash);
-        //$userObj->password = $hashedPassword;
-        //$userObj->password_hash = $hash;
-
         $userObj->password = password_hash($newPassword, PASSWORD_DEFAULT);
 
         return $userObj;

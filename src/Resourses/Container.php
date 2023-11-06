@@ -23,27 +23,22 @@ class Container{
 
     public readonly Validation $validation;
 
-    function __construct(){
+    function __construct()
+    {
         $this->db();
         $this->page = new Page($this->db->getConnection());
         $this->routes = new Routes($this->db->getConnection());
         $this->user = new User($this->db->getConnection());
         $this->template = new Template();
-        $this->validation = new Validation();
-       
-      
-        
+        $this->validation = new Validation();   
     }
 
-    private function db(){
+    private function db(): void
+    {
         if(!isset($this->db)){
             DatabaseConnection::connect();
             $this->db = DatabaseConnection::getInstance();
         }
     }
-
-    
-
-   
 
 }

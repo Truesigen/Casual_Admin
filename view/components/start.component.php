@@ -5,16 +5,16 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">  
-    <title>Visual Admin Dashboard - Home</title>
+    <title>Casual Admin Dashboard - Home</title>
 
     <!-- 
     Visual Admin Template
     http://www.templatemo.com/preview/templatemo_455_visual_admin
     -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,700' rel='stylesheet' type='text/css'>
-    <link href="assets/font-awesome.min.css" rel="stylesheet">
-    <link href="assets/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/templatemo-style.css" rel="stylesheet">
+    <link href="/assets/font-awesome.min.css" rel="stylesheet">
+    <link href="/assets/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/templatemo-style.css" rel="stylesheet">
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -30,7 +30,7 @@
       <div class="templatemo-sidebar">
         <header class="templatemo-site-header">
           <div class="square"></div>
-          <h1>Visual Admin</h1>
+          <h1>Casual Admin</h1>
         </header>
         <div class="profile-photo-container">
           <img src="images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">  
@@ -64,10 +64,10 @@
           <div class="row">
             <nav class="templatemo-top-nav col-lg-12 col-md-12">
               <ul class="text-uppercase">
-                <li><a href="" class="active">Admin panel</a></li>
-                <li><a href="">Dashboard</a></li>
-                <li><a href="">Overview</a></li>
-                <li><a href="/login">Sign in form</a></li>
+                <li><a href="/" class="active">Admin panel</a></li>
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/">Overview</a></li>
+                <li><a href="/register/new">Add new user</a></li>
               </ul>  
             </nav> 
           </div>
