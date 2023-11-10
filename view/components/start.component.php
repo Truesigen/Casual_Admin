@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">  
-    <title>Casual Admin Dashboard - Home</title>
+    <title><?php echo $view->getTitle(); ?></title>
 
     <!-- 
     Visual Admin Template
@@ -31,18 +31,8 @@
         <header class="templatemo-site-header">
           <div class="square"></div>
           <h1>Casual Admin</h1>
-        </header>
-        <div class="profile-photo-container">
-          <img src="images/profile-photo.jpg" alt="Profile Photo" class="img-responsive">  
-          <div class="profile-photo-overlay"></div>
-        </div>      
+        </header>  
         <!-- Search box -->
-        <form class="templatemo-search-form" role="search">
-          <div class="input-group">
-              <button type="submit" class="fa fa-search"></button>
-              <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">           
-          </div>
-        </form>
         <div class="mobile-menu-icon">
             <i class="fa fa-bars"></i>
         </div>
@@ -54,7 +44,12 @@
             <li><a href="maps.html"><i class="fa fa-map-marker fa-fw"></i>Maps</a></li>
             <li><a href="manage-users.html"><i class="fa fa-users fa-fw"></i>Manage Users</a></li>
             <li><a href="preferences.html"><i class="fa fa-sliders fa-fw"></i>Preferences</a></li>
-            <li><a href="/login"><i class="fa fa-eject fa-fw"></i>Sign Out</a></li>
+            <?php
+            if (isset($_SESSION['user_id'])) {?>
+            <li><a href="/exit"><i class="fa fa-eject fa-fw"></i>Sign Out</a></li>
+            <?php } else {?>
+            <li><a href="/login"><i class="fa fa-eject fa-fw"></i>Sign in</a></li>
+              <?php }?>
           </ul>  
         </nav>
       </div>

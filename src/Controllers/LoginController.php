@@ -10,7 +10,8 @@ class LoginController extends Controller
     public function runBeforeAction()
     {
         if (isset($_SESSION['user_id'])) {
-            return false;
+            header('Location: /');
+            exit;
         }
         if ($_POST) {
             $data = $this->validation->addRule(['required', 'min', 'max', 'emptySpaces'])->validate(['name' => $_POST['name'], 'password' => $_POST['password']]);
@@ -24,7 +25,7 @@ class LoginController extends Controller
 
                 exit;
             }
-            $_POST['success'] = 1;
+            $_POST['login_validation'] = 1;
         }
 
         return true;
@@ -32,7 +33,7 @@ class LoginController extends Controller
 
     public function login()
     {
-        if ($_POST['success'] ?? 0 == 1) {
+        if ($_POST['login_validation'] ?? 0 == 1) {
             $data = $this->service()->checkLogin($_POST['name'], $_POST['password']);
             if (is_int($data)) {
                 $_SESSION['user_id'] = $data;
@@ -44,7 +45,7 @@ class LoginController extends Controller
             $_SESSION['auth_error'] = 'Wrong password or username';
         }
 
-        $this->template->view('login');
+        $this->assignPage();
     }
 
     private function service(): AuthService

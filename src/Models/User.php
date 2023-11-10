@@ -16,8 +16,8 @@ class User extends Entity
         $this->fields = [
             'id',
             'name',
-            'username',
             'password',
+            'is_admin',
         ];
     }
 }

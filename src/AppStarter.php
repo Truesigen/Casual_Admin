@@ -19,27 +19,28 @@ class AppStarter
 
         $task = $this->findRoute($module);
 
-        if ($task) {
-            $filePath = ROOT_PATH."/src/Controllers/{$task['controller']}.php";
-
-            if (file_exists($filePath)) {
-                $class = 'App\Controllers\\'.$task['controller'];
-                // $name = sprintf('App\Controllers\%s', 'DefaultController');
-                //include_once ROOT_PATH.'/src/Controllers/DefaultController.php';
-
-                $controller = new $class();
-                $controller->setTemplate($this->container->template);
-                $controller->setDbc($this->container->db);
-                $controller->setPage($this->container->page);
-                $controller->setUser($this->container->user);
-                $controller->setRoutes($this->container->routes);
-                $controller->setValidation($this->container->validation);
-                $controller->setEntityId($task['entity_id']);
-                $controller->runAction($task['action']);
-            }
-        } else {
+        if (empty($task)) {
             echo 'Not found';
             http_response_code(404);
+
+            return;
+        }
+
+        $filePath = ROOT_PATH."/src/Controllers/{$task['controller']}.php";
+
+        if (file_exists($filePath)) {
+            $class = 'App\Controllers\\'.$task['controller'];
+
+            $controller = new $class();
+            $controller->setTemplate($this->container->template);
+            $controller->setDbc($this->container->db);
+            $controller->setPage($this->container->page);
+            $controller->setUser($this->container->user);
+            $controller->setRoutes($this->container->routes);
+            $controller->setValidation($this->container->validation);
+            $controller->setEvent($this->container->events);
+            $controller->setEntityId($task['entity_id']);
+            $controller->runAction($task['action']);
         }
     }
 

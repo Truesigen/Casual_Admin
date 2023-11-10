@@ -17,17 +17,21 @@ class AuthService
     {
         $userObj = $this->user->first('name', $username);
 
-        if (property_exists($userObj, 'id')) {
+        if (! empty($userObj) && property_exists($userObj, 'id')) {
             return password_verify($password, $userObj->password) ? $userObj->id : false;
         }
 
         return false;
     }
 
-    public function changeUserPassword($userObj, $newPassword)
+    public function registerNewUser($username, $password): int|bool
     {
-        $userObj->password = password_hash($newPassword, PASSWORD_DEFAULT);
+        $success = $this->user->insert(['name' => $username, 'password' => password_hash($password, PASSWORD_DEFAULT)]);
 
-        return $userObj;
+        if (empty($success)) {
+            $_SESSION['auth_error'] = 'Unknown issue.';
+        }
+
+        return $success;
     }
 }

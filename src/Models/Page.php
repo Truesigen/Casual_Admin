@@ -16,7 +16,7 @@ class Page extends Entity
         $this->fields = [
             'id',
             'title',
-            'content',
+            'template',
         ];
     }
 }

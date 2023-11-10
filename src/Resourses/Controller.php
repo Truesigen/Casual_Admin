@@ -16,11 +16,18 @@ abstract class Controller
 
     protected EntityInterface $routes;
 
+    protected EntityInterface $events;
+
     protected Validation $validation;
 
     public function setValidation(Validation $validation)
     {
         $this->validation = $validation;
+    }
+
+    public function setEvent(EntityInterface $events)
+    {
+        $this->events = $events;
     }
 
     public function setTemplate(Template $template)
@@ -59,9 +66,22 @@ abstract class Controller
 
         if (method_exists($this, $actionName)) {
             $this->$actionName();
-        } else {
-            include 'view/status/404.html';
         }
+
+        if (method_exists($this, 'runAfterAction')) {
+            $this->runAfterAction();
+        }
+    }
+
+    protected function assignPage(string $valueName = '', $pageData = []): void
+    {
+        if (isset($pageData)) {
+            $data[$valueName] = $pageData;
+        }
+
+        $page = $this->page->first('id', $this->entityId);
+        $this->template->title($page->title);
+        $this->template->view($page->template, $data);
     }
 
     public function setEntityId($entityId)
