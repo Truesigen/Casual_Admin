@@ -35,4 +35,12 @@ class Template
     {
         return $this->title;
     }
+
+    public function seeErrors(string $key): void
+    {
+        if (isset($_SESSION[$key])) {
+            echo is_string($_SESSION[$key]) ? $_SESSION[$key] : $_SESSION[$key][0];
+            unset($_SESSION[$key]);
+        }
+    }
 }

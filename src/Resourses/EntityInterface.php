@@ -11,4 +11,6 @@ interface EntityInterface
     public function findAll(): array;
 
     public function insert(array $values): int|bool;
+
+    public function setValues(array $values, $object = null): object;
 }

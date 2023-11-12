@@ -73,18 +73,14 @@ abstract class Controller
         }
     }
 
-    protected function assignPage(string $valueName = '', $pageData = []): void
+    protected function assignPage(array $pageData = []): void
     {
-        if (isset($pageData)) {
-            $data[$valueName] = $pageData;
-        }
-
         $page = $this->page->first('id', $this->entityId);
         $this->template->title($page->title);
-        $this->template->view($page->template, $data);
+        $this->template->view($page->template, $pageData);
     }
 
-    public function setEntityId($entityId)
+    public function setEntityId($entityId): void
     {
         $this->entityId = $entityId;
     }

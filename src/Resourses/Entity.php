@@ -61,18 +61,8 @@ abstract class Entity implements EntityInterface
 
     public function updateValues(): void
     {
-        $fields = [];
-        $fieldsValue = [];
-
-        foreach ($this->fields as $item) {
-            $fields[] = $item.' = ?';
-        }
-
-        foreach ($this->fields as $value) {
-            $fieldsValue[] = $this->$value;
-        }
-
-        $fieldsName = implode(', ', $fields);
+        $fieldsName = implode(', ', array_map(fn ($data) => "$data = ?", $this->fields));
+        $fieldsValue = array_map(fn ($data) => $this->$data, $this->fields);
 
         $sql = "UPDATE $this->tableName SET $fieldsName WHERE id = $fieldsValue[0]";
         $stmt = $this->dbc->prepare($sql);
@@ -99,7 +89,7 @@ abstract class Entity implements EntityInterface
         return $result;
     }
 
-    private function setValues(array $values, $object = null): object
+    public function setValues(array $values, $object = null): object
     {
         if ($object == null) {
             $object = $this;

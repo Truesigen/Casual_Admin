@@ -13,7 +13,8 @@ class LoginController extends Controller
             header('Location: /');
             exit;
         }
-        if ($_POST) {
+
+        if (! empty($_POST)) {
             $data = $this->validation->addRule(['required', 'min', 'max', 'emptySpaces'])->validate(['name' => $_POST['name'], 'password' => $_POST['password']]);
 
             if (! $data) {
@@ -22,10 +23,9 @@ class LoginController extends Controller
                 }
 
                 header('Location: /login');
-
                 exit;
             }
-            $_POST['login_validation'] = 1;
+            $_POST['login_validation'] = 'passed';
         }
 
         return true;
@@ -35,14 +35,17 @@ class LoginController extends Controller
     {
         if ($_POST['login_validation'] ?? 0 == 1) {
             $data = $this->service()->checkLogin($_POST['name'], $_POST['password']);
-            if (is_int($data)) {
-                $_SESSION['user_id'] = $data;
 
-                header('Location: /');
+            if (empty($data)) {
+                $_SESSION['auth_error'] = 'Wrong password or username';
+                header('Location: /login');
                 exit;
             }
 
-            $_SESSION['auth_error'] = 'Wrong password or username';
+            $_SESSION['user_id'] = $data->id;
+            $_SESSION['is_admin'] = $data->is_admin;
+            header('Location: /');
+            exit;
         }
 
         $this->assignPage();

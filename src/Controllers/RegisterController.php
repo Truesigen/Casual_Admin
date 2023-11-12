@@ -9,18 +9,19 @@ class RegisterController extends Controller
 {
     public function runBeforeAction()
     {
-        if ($_POST) {
+        if (! empty($_POST)) {
             $validation = $this->validation->addRule(['required', 'min', 'max', 'emptySpaces'])->validate(['name' => $_POST['name'], 'password' => $_POST['password']]);
 
             if (! $validation) {
                 foreach ($this->validation->getAllErrors() as $key => $value) {
                     $_SESSION[$key] = $value;
                 }
-                header('Location: /register/new');
+
+                header('Location: /registration');
                 exit;
             }
 
-            $_POST['register_validation'] = 1;
+            $_POST['register_validation'] = 'passed';
         }
 
         return true;

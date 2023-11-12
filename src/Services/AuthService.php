@@ -13,23 +13,23 @@ class AuthService
         $this->user = $user;
     }
 
-    public function checkLogin(string $username, string $password): int|false
+    public function checkLogin(string $username, string $password): EntityInterface|false
     {
         $userObj = $this->user->first('name', $username);
 
         if (! empty($userObj) && property_exists($userObj, 'id')) {
-            return password_verify($password, $userObj->password) ? $userObj->id : false;
+            return password_verify($password, $userObj->password) ? $userObj : false;
         }
 
         return false;
     }
 
-    public function registerNewUser($username, $password): int|bool
+    public function registerNewUser(string $username, string $password): int|bool
     {
         $success = $this->user->insert(['name' => $username, 'password' => password_hash($password, PASSWORD_DEFAULT)]);
 
         if (empty($success)) {
-            $_SESSION['auth_error'] = 'Unknown issue.';
+            $_SESSION['auth_error'] = "$username already on board!";
         }
 
         return $success;

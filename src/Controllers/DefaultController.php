@@ -9,20 +9,31 @@ class DefaultController extends Controller
 {
     public function default()
     {
-        $events = $this->events->findAll();
-
-        $this->assignPage('events', $events);
+        $this->assignPage(['events' => $this->events->findAll()]);
     }
 
-    private function service()
+    public function event()
     {
-        return new PageService($this->events);
+        if (isset($_SESSION['user_id'])) {
+            $event = $this->events->first('id', intval($_GET['id']));
+            $event->setValues(['user_id' => $_SESSION['user_id']]);
+            $event->updateValues();
+        }
+
+        header('Location: /');
+        exit;
     }
 
     public function logout()
     {
         unset($_SESSION['user_id']);
+        unset($_SESSION['is_admin']);
         header('Location: /login');
         exit;
+    }
+
+    private function service(): PageService
+    {
+        return new PageService($this->events);
     }
 }
