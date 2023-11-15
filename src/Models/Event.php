@@ -45,4 +45,17 @@ class Event extends Entity
 
         return $eventsList;
     }
+
+    public function getTasks(string $fieldName, ?string $fieldsValue, int $limit = 3): array
+    {
+        if (empty($fieldsValue)) {
+            return [];
+        }
+        $sql = "SELECT * FROM $this->tableName WHERE $fieldName = ? LIMIT $limit";
+        $stmt = $this->dbc->prepare($sql);
+        $stmt->execute([$fieldsValue]);
+        $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $data;
+    }
 }

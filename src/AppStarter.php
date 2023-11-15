@@ -33,7 +33,6 @@ class AppStarter
 
             $controller = new $class();
             $controller->setTemplate($this->container->template);
-            $controller->setDbc($this->container->db);
             $controller->setPage($this->container->page);
             $controller->setUser($this->container->user);
             $controller->setRoutes($this->container->routes);

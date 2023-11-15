@@ -26,12 +26,16 @@ class AuthService
 
     public function registerNewUser(string $username, string $password): int|bool
     {
-        $success = $this->user->insert(['name' => $username, 'password' => password_hash($password, PASSWORD_DEFAULT)]);
+        $userCheck = $this->user->first('name', $username);
 
-        if (empty($success)) {
-            $_SESSION['auth_error'] = "$username already on board!";
+        if (empty($userCheck)) {
+            $success = $this->user->insert(['name' => $username, 'password' => password_hash($password, PASSWORD_DEFAULT)]);
+
+            return $success;
         }
 
-        return $success;
+        $_SESSION['auth_error'] = "$username already on board!";
+
+        return false;
     }
 }

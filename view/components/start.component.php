@@ -22,9 +22,7 @@
             <li><a href="/" class="active"><i class="fa fa-home fa-fw"></i>Dashboard</a></li>
             <li><a href="/event/new"><i class="fa fa-bar-chart fa-fw"></i>Create Event</a></li>
             <li><a href="/event/explore"><i class="fa fa-database fa-fw"></i>Event Visualization</a></li>
-            <li><a href="maps.html"><i class="fa fa-map-marker fa-fw"></i>Maps</a></li>
-            <li><a href="manage-users.html"><i class="fa fa-users fa-fw"></i>Manage Users</a></li>
-            <li><a href="preferences.html"><i class="fa fa-sliders fa-fw"></i>Preferences</a></li>
+            <li><a href="/profile/"><i class="fa fa-users fa-fw"></i>Manage Profile</a></li>
             <?php
             if (isset($_SESSION['user_id'])) {?>
             <li><a href="/exit"><i class="fa fa-eject fa-fw"></i>Sign Out</a></li>

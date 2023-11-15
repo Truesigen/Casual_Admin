@@ -50,6 +50,18 @@ class EventController extends Controller
         $this->assignPage();
     }
 
+    public function explore()
+    {
+        if ($_SESSION['user_id'] ?? 0 == 1) {
+            $this->assignPage(
+                ['tasks' => $this->events->getTasks('user_id', $_SESSION['user_id']),
+                    'events' => $this->events->getTasks('created_by', $_SESSION['user_id']),
+                ]);
+        } else {
+            $this->assignPage();
+        }
+    }
+
     private function service(): PageService
     {
         return new PageService($this->events, $this->user);

@@ -8,8 +8,6 @@ abstract class Controller
 
     protected Template $template;
 
-    protected DatabaseConnection $dbc;
-
     protected EntityInterface $page;
 
     protected EntityInterface $user;
@@ -33,11 +31,6 @@ abstract class Controller
     public function setTemplate(Template $template)
     {
         $this->template = $template;
-    }
-
-    public function setDbc(DatabaseConnection $dbc)
-    {
-        $this->dbc = $dbc;
     }
 
     public function setPage(EntityInterface $page)

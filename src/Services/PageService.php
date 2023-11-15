@@ -16,12 +16,12 @@ class PageService
         $this->user = $user;
     }
 
-    public function checkPass(int $userId, string $userPass): string|bool
+    public function checkPass(int $userId, string $userPass): bool
     {
         $userObj = $this->user->first('id', $userId);
 
         if (! empty($userObj) && property_exists($userObj, 'id')) {
-            return password_verify($userPass, $userObj->password) ? 'true' : 0;
+            return password_verify($userPass, $userObj->password) ? 1 : 0;
         }
 
         return false;
