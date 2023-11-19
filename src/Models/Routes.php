@@ -4,14 +4,14 @@ namespace App\Models;
 
 use App\Resourses\Entity;
 
-class Routes extends Entity
+class Routes extends Entity implements EntityInterface
 {
     public function __construct(\PDO $dbc)
     {
         parent::__construct($dbc, 'routes');
     }
 
-    protected function initFields(): void
+    public function initFields(): void
     {
         $this->fields = [
             'id',

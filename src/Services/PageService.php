@@ -2,15 +2,16 @@
 
 namespace App\Services;
 
-use App\Resourses\EntityInterface;
+use App\Models\Event;
+use App\Models\User;
 
 class PageService
 {
-    private EntityInterface $events;
+    private Event $events;
 
-    private EntityInterface $user;
+    private User $user;
 
-    public function __construct(EntityInterface $events, EntityInterface $user)
+    public function __construct(Event $events, User $user)
     {
         $this->events = $events;
         $this->user = $user;

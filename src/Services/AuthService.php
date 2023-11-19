@@ -2,18 +2,18 @@
 
 namespace App\Services;
 
-use App\Resourses\EntityInterface;
+use App\Models\User;
 
 class AuthService
 {
-    private EntityInterface $user;
+    private User $user;
 
-    public function __construct(EntityInterface $user)
+    public function __construct(User $user)
     {
         $this->user = $user;
     }
 
-    public function checkLogin(string $username, string $password): EntityInterface|false
+    public function checkLogin(string $username, string $password): User|false
     {
         $userObj = $this->user->first('name', $username);
 

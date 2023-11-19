@@ -2,7 +2,7 @@
 
 namespace App\Resourses;
 
-abstract class Entity implements EntityInterface
+abstract class Entity
 {
     protected \PDO $dbc;
 
@@ -103,8 +103,6 @@ abstract class Entity implements EntityInterface
 
         return $object;
     }
-
-    abstract protected function initFields(): void;
 }
 ?>
    

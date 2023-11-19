@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\EntityFactory;
 use App\Resourses\Controller;
 use App\Services\AuthService;
 
@@ -53,6 +54,6 @@ class LoginController extends Controller
 
     private function service(): AuthService
     {
-        return new AuthService($this->user);
+        return new AuthService(EntityFactory::make('User'));
     }
 }

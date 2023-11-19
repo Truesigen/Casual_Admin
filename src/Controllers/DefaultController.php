@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\EntityFactory;
 use App\Resourses\Controller;
 use App\Services\PageService;
 
@@ -9,13 +10,13 @@ class DefaultController extends Controller
 {
     public function default()
     {
-        $this->assignPage(['events' => $this->events->findAll()]);
+        $this->assignPage(['events' => EntityFactory::make('Event')->findAll()]);
     }
 
     public function event()
     {
         if (isset($_SESSION['user_id'])) {
-            $event = $this->events->first('id', intval($_GET['id']));
+            $event = EntityFactory::make('Event')->first('id', intval($_GET['id']));
             $event->setValues(['user_id' => $_SESSION['user_id']]);
             $event->updateValues();
         }
@@ -34,6 +35,6 @@ class DefaultController extends Controller
 
     private function service(): PageService
     {
-        return new PageService($this->events);
+        return new PageService(EntityFactory::make('Event'));
     }
 }

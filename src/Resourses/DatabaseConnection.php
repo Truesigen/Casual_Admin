@@ -25,14 +25,13 @@ final class DatabaseConnection
     {
     }
 
-     public function __wakeup()
-     {
-     }
+    public function __wakeup()
+    {
+    }
 
     public static function connect()
     {
         /* Подключение к базе данных MySQL с помощью вызова драйвера */
-
         self::$connection = new \PDO('mysql:dbname=crm;host=127.0.0.1:3306', 'root', 'zero1019');
     }
 

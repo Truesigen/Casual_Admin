@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\EntityFactory;
 use App\Resourses\Controller;
 use App\Services\PageService;
 
@@ -54,8 +55,8 @@ class EventController extends Controller
     {
         if ($_SESSION['user_id'] ?? 0 == 1) {
             $this->assignPage(
-                ['tasks' => $this->events->getTasks('user_id', $_SESSION['user_id']),
-                    'events' => $this->events->getTasks('created_by', $_SESSION['user_id']),
+                ['tasks' => EntityFactory::make('Event')->getTasks('user_id', $_SESSION['user_id']),
+                    'events' => EntityFactory::make('Event')->getTasks('created_by', $_SESSION['user_id']),
                 ]);
         } else {
             $this->assignPage();
@@ -64,6 +65,6 @@ class EventController extends Controller
 
     private function service(): PageService
     {
-        return new PageService($this->events, $this->user);
+        return new PageService(EntityFactory::make('Event'), EntityFactory::make('User'));
     }
 }

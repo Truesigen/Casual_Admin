@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Resourses\Entity;
 
-class User extends Entity
+class User extends Entity implements EntityInterface
 {
     public array $avatars;
 
@@ -13,7 +13,7 @@ class User extends Entity
         parent::__construct($dbc, 'users');
     }
 
-    protected function initFields(): void
+    public function initFields(): void
     {
         $this->fields = [
             'id',
