@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Resourses;
+namespace App\Resources;
 
 class Validation
 {
@@ -36,14 +36,14 @@ class Validation
         return empty($this->errors);
     }
 
-        public function getAllErrors()
-        {
-            return $this->errors;
-        }
+    public function getAllErrors(): array
+    {
+        return $this->errors;
+    }
 
-        public function unsetRules()
-        {
-            unset($this->rules);
-            unset($this->errors);
-        }
+    public function unsetRules()
+    {
+        unset($this->rules);
+        unset($this->errors);
+    }
 }

@@ -3,7 +3,7 @@
 namespace App;
 
 use App\Models\EntityFactory;
-use App\Resourses\Container;
+use App\Resources\Container;
 
 class AppStarter
 {
@@ -16,8 +16,7 @@ class AppStarter
 
     public function run(): void
     {
-        $app = EntityFactory::make('Routes')->first('pretty_url', strtok($_SERVER['REQUEST_URI'], '?'));
-
+        $app = EntityFactory::make('route')->find('pretty_url', strtok($_SERVER['REQUEST_URI'], '?'));
         if (empty($app) || ! property_exists($app, 'module')) {
             echo 'Not found';
             http_response_code(404);
@@ -29,7 +28,8 @@ class AppStarter
 
         if (file_exists(ROOT_PATH."/src/Controllers/{$module}.php")) {
             $class = 'App\Controllers\\'.$module;
-            $controller = new $class($app->entity_id, $this->container->template, $this->container->validation);
+
+            $controller = new $class($app->page_id, $this->container->template, $this->container->validation, $this->container->redirect, $this->container->session);
             $controller->runAction($app->action);
         }
     }

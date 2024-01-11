@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
-use App\Resourses\Entity;
+use App\Resources\Entity;
 
-class User extends Entity implements EntityInterface
+class User extends Entity
 {
     public array $avatars;
 
-    public function __construct(\PDO $dbc)
+    public function __construct()
     {
-        parent::__construct($dbc, 'users');
+        parent::__construct('users');
     }
 
-    public function initFields(): void
+    protected function initFields(): void
     {
         $this->fields = [
             'id',

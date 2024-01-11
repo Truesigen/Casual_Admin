@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\EntityFactory;
-use App\Resourses\Controller;
+use App\Resources\Controller;
 
 class ProfileController extends Controller
 {
@@ -29,8 +29,8 @@ class ProfileController extends Controller
     {
         if ($_GET['avatar'] ?? 0 == 1) {
             $userObj = EntityFactory::make('User')->first('id', $_SESSION['user_id']);
-            $userObj->setValues(['avatar' => $_GET['avatar']]);
-            $userObj->updateValues();
+            $userObj->setValues(['avatar' => $_GET['avatar']])->updateValues();
+            // $userObj->updateValues();
             $this->assignPage(['user' => $userObj]);
         }
     }

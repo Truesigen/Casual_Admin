@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Resourses\DatabaseConnection;
+use App\Resources\Entity;
 
 class EntityFactory
 {
-    public static function make(string $class): EntityInterface
+    public static function make(string $class): Entity
     {
-        $class = 'App\Models\\'.$class;
+        $class = 'App\Models\\'.ucfirst($class);
 
-        return new $class(DatabaseConnection::getConnection());
+        return new $class();
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Resourses;
+namespace App\Resources\Database;
 
-final class DatabaseConnection
+final class MysqlConnection
 {
     private static $instance = null;
 
@@ -11,7 +11,7 @@ final class DatabaseConnection
     public static function getInstance()
     {
         if (is_null(self::$instance)) {
-            self::$instance = new DatabaseConnection();
+            self::$instance = new MysqlConnection();
         }
 
         return self::$instance;

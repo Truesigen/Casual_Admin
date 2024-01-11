@@ -2,58 +2,50 @@
 
 namespace App\Controllers;
 
-use App\Models\EntityFactory;
-use App\Resourses\Controller;
+use App\Resources\Controller;
+use App\Resources\Http\Request;
 use App\Services\AuthService;
 
 class LoginController extends Controller
 {
     public function runBeforeAction()
     {
-        if (isset($_SESSION['user_id'])) {
-            header('Location: /');
-            exit;
-        }
-
-        if (! empty($_POST)) {
-            $data = $this->validation->addRule(['required', 'min', 'max', 'emptySpaces'])->validate(['name' => $_POST['name'], 'password' => $_POST['password']]);
-
-            if (! $data) {
-                foreach ($this->validation->getAllErrors() as $key => $error) {
-                    $_SESSION[$key] = $error;
-                }
-
-                header('Location: /login');
-                exit;
-            }
-            $_POST['login_validation'] = 'passed';
+        if ($this->session->has('user_id')) {
+            $this->redirect->redirect('/');
         }
 
         return true;
     }
 
-    public function login()
+    //route(/login)
+    public function default()
     {
-        if ($_POST['login_validation'] ?? 0 == 1) {
-            $data = $this->service()->checkLogin($_POST['name'], $_POST['password']);
+        $this->assignPage();
+    }
 
-            if (empty($data)) {
-                $_SESSION['auth_error'] = 'Wrong password or username';
-                header('Location: /login');
-                exit;
-            }
+    //route(/sign-in)
+    public function login(Request $request)
+    {
+        $login = $this->validation->addRule(['required', 'min', 'max', 'emptySpaces'])->validate($request->post());
 
-            $_SESSION['user_id'] = $data->id;
-            $_SESSION['is_admin'] = $data->is_admin;
-            header('Location: /');
-            exit;
+        if (! $login) {
+            $this->session->setErrors($this->validation->getAllErrors());
+            $this->redirect->redirect('/login');
         }
 
-        $this->assignPage();
+        $user = $this->service()->checkLogin($request->name, $request->password);
+
+        if (! $user) {
+            $this->redirect->redirect('/login');
+        }
+
+        $_SESSION['user_id'] = $user->id;
+
+        $this->redirect->redirect('/');
     }
 
     private function service(): AuthService
     {
-        return new AuthService(EntityFactory::make('User'));
+        return new AuthService();
     }
 }

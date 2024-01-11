@@ -6,9 +6,9 @@
                         <td><?= $event->created_at?></td>
                         <td><?= $event->name?></td>
                         <td><?php if (empty($_SESSION['user_id'])) { ?>
-                            <a href="/login" class="templatemo-blue-button">Login</a> 
-                       <?php } else {?>
-                             <a href="/event/?id=<?=$event->id?>" class="templatemo-white-button">Catch up</a>
+                              <a href="/login" class="templatemo-blue-button">Login</a> 
+                       <?php } else {?>                    
+                              <a href="/event/?id=<?=$event->id?>" class="templatemo-white-button">Catch</a>
                         <?php } ?>
                         </td>
                         </tr>

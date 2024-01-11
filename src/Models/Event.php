@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use App\Resourses\Entity;
+use App\Resources\Entity;
 
-class Event extends Entity implements EntityInterface
+class Event extends Entity
 {
-    public function __construct(\PDO $dbc)
+    public function __construct()
     {
-        parent::__construct($dbc, 'events');
+        parent::__construct('events');
     }
 
-    public function initFields(): void
+    protected function initFields(): void
     {
         $this->fields = [
             'id',

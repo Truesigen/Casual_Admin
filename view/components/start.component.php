@@ -24,7 +24,7 @@
             <li><a href="/event/explore"><i class="fa fa-database fa-fw"></i>Event Visualization</a></li>
             <li><a href="/profile/"><i class="fa fa-users fa-fw"></i>Manage Profile</a></li>
             <?php
-            if (isset($_SESSION['user_id'])) {?>
+            if ($session->has('user_id')) {?>
             <li><a href="/exit"><i class="fa fa-eject fa-fw"></i>Sign Out</a></li>
             <?php } else {?>
             <li><a href="/login"><i class="fa fa-eject fa-fw"></i>Sign in</a></li>

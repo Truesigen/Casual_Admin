@@ -2,43 +2,48 @@
 
 namespace App\Controllers;
 
-use App\Models\EntityFactory;
-use App\Resourses\Controller;
+use App\Resources\Controller;
+use App\Resources\Http\Request;
 use App\Services\AuthService;
 
 class RegisterController extends Controller
 {
     public function runBeforeAction()
     {
-        if (! empty($_POST)) {
-            $validation = $this->validation->addRule(['required', 'min', 'max', 'emptySpaces'])->validate(['name' => $_POST['name'], 'password' => $_POST['password']]);
-
-            if (! $validation) {
-                foreach ($this->validation->getAllErrors() as $key => $value) {
-                    $_SESSION[$key] = $value;
-                }
-
-                header('Location: /registration');
-                exit;
-            }
-
-            $_POST['register_validation'] = 'passed';
+        if ($this->session->has('user_id')) {
+            $this->redirect->redirect('/');
         }
 
         return true;
     }
 
-    public function register()
+    //route(/register-new-user)
+    public function default()
     {
-        if ($_POST['register_validation'] ?? 0 == 1) {
-            $this->service()->registerNewUser($_POST['name'], $_POST['password']);
+        $this->assignPage();
+    }
+
+    //route(/register)
+    public function register(Request $request)
+    {
+        $validation = $this->validation->addRule(['required', 'min', 'max', 'emptySpaces'])->validate($request->post());
+
+        if (! $validation) {
+            $this->session->setErrors($this->validation->getAllErrors());
+            $this->redirect->redirect('/register-new-user');
         }
 
-        $this->assignPage();
+        $registration = $this->service()->registerNewUser($request->name, $request->password);
+
+        if (! $registration) {
+            $this->redirect->redirect('/register-new-user');
+        }
+
+        $this->redirect->redirect('/login');
     }
 
     private function service(): AuthService
     {
-        return new AuthService(EntityFactory::make('User'));
+        return new AuthService();
     }
 }

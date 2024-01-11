@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\EntityFactory;
-use App\Resourses\Controller;
+use App\Resources\Controller;
 use App\Services\PageService;
 
 class EventController extends Controller

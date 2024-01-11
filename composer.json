@@ -9,6 +9,7 @@
     },
     "require-dev": {
         "symfony/var-dumper": "^6.0",
-        "laravel/pint": "^1.5"
+        "laravel/pint": "^1.5",
+        "fakerphp/faker": "^1.23"
     }
 }

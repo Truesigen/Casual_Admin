@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use App\Resourses\Entity;
+use App\Resources\Entity;
 
-class Page extends Entity implements EntityInterface
+class Page extends Entity
 {
-    public function __construct(\PDO $dbc)
+    public function __construct()
     {
-        parent::__construct($dbc, 'pages');
+        parent::__construct('pages');
     }
 
-    public function initFields(): void
+    protected function initFields(): void
     {
         $this->fields = [
             'id',

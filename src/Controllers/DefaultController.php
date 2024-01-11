@@ -3,14 +3,14 @@
 namespace App\Controllers;
 
 use App\Models\EntityFactory;
-use App\Resourses\Controller;
+use App\Resources\Controller;
 use App\Services\PageService;
 
 class DefaultController extends Controller
 {
     public function default()
     {
-        $this->assignPage(['events' => EntityFactory::make('Event')->findAll()]);
+        $this->assignPage(['events' => EntityFactory::make('event')->all()]);
     }
 
     public function event()
@@ -27,10 +27,8 @@ class DefaultController extends Controller
 
     public function logout()
     {
-        unset($_SESSION['user_id']);
-        unset($_SESSION['is_admin']);
-        header('Location: /login');
-        exit;
+        $this->session->unsetUserId();
+        $this->redirect->redirect('/login');
     }
 
     private function service(): PageService

@@ -15,23 +15,23 @@
 	          <h1>Casual Admin</h1>
 			  <h2>Registration</h2>
 	        </header>
-				<form action="/registration" method="post" class="templatemo-login-form" >
+				<form action="/registration" method="post" class="templatemo-login-form">
 	        	<div class="form-group">
 	        		<div class="input-group">
-		        		<div class="input-group-addon blue-text"><?php $view->seeErrors('name'); ?></div>	        		
-		              	<input type="text" name="name" class="form-control" placeholder="Rafael"/>           
+		        		<div class="input-group-addon blue-text"><?php $session->seeErrors('name'); ?></div>	        		
+		              	<input type="text" name="name" class="form-control" placeholder="Rafael" value="<?php echo $session->old('name')?>"/>           
 		          	</div>
 	        	</div>
 	        	<div class="form-group">
 	        		<div class="input-group">
 		              	<input type="password" name="password" class="form-control" placeholder="******" />         
-		        		<div class="input-group-addon blue-text"><?php $view->seeErrors('password'); ?></div>	 	        		
+		        		<div class="input-group-addon blue-text"><?php $session->seeErrors('password'); ?></div>	 	        		
 		          	</div>		
 	        	</div>	          	
 				<div class="form-group">
 					<button type="submit" class="templatemo-blue-button width-100">Sign up</button>
 				</div>
-				<div class="input-group-addon red-text"><?php $view->seeErrors('auth_error')?></div>
+				<div class="input-group-addon red-text"><?php $session->seeErrors('auth_error')?></div>
 	        </form>
 			</div>
 		<div class="templatemo-content-widget templatemo-login-widget templatemo-register-widget white-bg">

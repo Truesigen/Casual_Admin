@@ -2,23 +2,28 @@
 
 namespace App\Services;
 
+use App\Models\EntityFactory;
 use App\Models\User;
 
 class AuthService
 {
     private User $user;
 
-    public function __construct(User $user)
+    public function __construct()
     {
-        $this->user = $user;
+        $this->user = EntityFactory::make('User');
     }
 
     public function checkLogin(string $username, string $password): User|false
     {
-        $userObj = $this->user->first('name', $username);
+        $userObj = $this->findUserByName($username);
 
-        if (! empty($userObj) && property_exists($userObj, 'id')) {
-            return password_verify($password, $userObj->password) ? $userObj : false;
+        if (! empty($userObj) && password_verify($password, $userObj->password)) {
+            return $userObj;
+        } else {
+            $_SESSION['auth_error'] = 'Wrong password or username.';
+
+            return false;
         }
 
         return false;
@@ -26,16 +31,25 @@ class AuthService
 
     public function registerNewUser(string $username, string $password): int|bool
     {
-        $userCheck = $this->user->first('name', $username);
+        $userCheck = $this->findUserByName($username);
 
-        if (empty($userCheck)) {
-            $success = $this->user->insert(['name' => $username, 'password' => password_hash($password, PASSWORD_DEFAULT)]);
+        if (! empty($userCheck) && property_exists($userCheck, 'id')) {
+            $_SESSION['auth_error'] = "$username already on board!";
 
-            return $success;
+            return false;
         }
 
-        $_SESSION['auth_error'] = "$username already on board!";
+        $success = $this->user
+                            ->fill(['name' => $username, 'password' => password_hash($password, PASSWORD_DEFAULT)])
+                            ->save();
 
-        return false;
+        return $success;
+    }
+
+    private function findUserByName(string $name): User|false
+    {
+        $entity = $this->user->first('name', $name);
+
+        return $entity ?? false;
     }
 }

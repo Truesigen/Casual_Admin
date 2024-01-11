@@ -1,10 +1,16 @@
 <?php
 
-namespace App\Resourses;
+namespace App\Resources;
+
+use App\Resources\Http\Session;
 
 class Template
 {
     private $title;
+
+    public function __construct(private Session $session)
+    {
+    }
 
     public function view(string $template, $variables = []): void
     {
@@ -23,6 +29,7 @@ class Template
     {
         return [
             'view' => $this,
+            'session' => $this->session,
         ];
     }
 
@@ -34,13 +41,5 @@ class Template
     public function getTitle(): string
     {
         return $this->title;
-    }
-
-    public function seeErrors(string $key): void
-    {
-        if (isset($_SESSION[$key])) {
-            echo is_string($_SESSION[$key]) ? $_SESSION[$key] : $_SESSION[$key][0];
-            unset($_SESSION[$key]);
-        }
     }
 }
