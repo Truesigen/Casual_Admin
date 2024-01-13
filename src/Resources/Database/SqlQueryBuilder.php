@@ -26,6 +26,8 @@ class SqlQueryBuilder
     public function select(string $field, string $value, array $columns = ['*'], int $limit = null): SqlQueryBuilder
     {
         $columns = implode(', ', array_values($columns));
+        $field = in_array($field, $this->entityFields) ? $field : null;
+
         $this->query = "SELECT $columns FROM  $this->table WHERE $field = ?";
 
         if (isset($limit)) {
@@ -69,8 +71,8 @@ class SqlQueryBuilder
 
     public function update(): SqlQueryBuilder
     {
-        $fieldsName = implode(', ', array_map(fn ($data) => "$data = ?", $this->fields));
-        $fieldsValue = array_map(fn ($data) => $this->$data, $this->fields);
+        $fieldsName = implode(', ', array_map(fn ($data) => "$data = ?", $this->entityFields));
+        $fieldsValue = array_map(fn ($data) => $this->$data, $this->entityFields);
 
         $sql = "UPDATE $this->tableName SET $fieldsName WHERE id = $fieldsValue[0]";
 
@@ -93,11 +95,10 @@ class SqlQueryBuilder
     private function fetch(array $properties = []): \PDOStatement
     {
         $stmt = $this->dbc->prepare($this->query);
-
         try {
             $stmt->execute($properties);
         } catch(\PDOException $exception) {
-            echo $exception->getMessages();
+            echo $exception->getMessage();
         }
 
         return $stmt;

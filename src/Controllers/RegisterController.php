@@ -18,7 +18,7 @@ class RegisterController extends Controller
     }
 
     //route(/register-new-user)
-    public function default()
+    public function index()
     {
         $this->assignPage();
     }

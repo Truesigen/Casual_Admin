@@ -48,7 +48,7 @@ class AuthService
 
     private function findUserByName(string $name): User|false
     {
-        $entity = $this->user->first('name', $name);
+        $entity = $this->user->find('name', $name);
 
         return $entity ?? false;
     }

@@ -18,7 +18,7 @@ class LoginController extends Controller
     }
 
     //route(/login)
-    public function default()
+    public function index()
     {
         $this->assignPage();
     }

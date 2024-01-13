@@ -22,7 +22,7 @@ abstract class Entity
         return new SqlQueryBuilder($this->tableName, $this->fields);
     }
 
-    public function save()
+    public function save(): int
     {
         return $this->builder()->insert(clone $this)->get();
     }
@@ -36,7 +36,10 @@ abstract class Entity
     {
         $databaseData = $this->builder()->select($fieldName, $fieldValue, ['*'], 1)->get();
 
-        return isset($databaseData) ? $this->fill($databaseData) : false;
+        $this->fill($databaseData);
+        $this->relations();
+
+        return $this;
     }
 
     public function all(): array
@@ -65,16 +68,15 @@ abstract class Entity
         return $this;
     }
 
-    public function relations()
+    public function relations(): void
     {
         if (method_exists($this, 'hasOne')) {
             [$model, $column] = $this->hasOne();
 
-            foreach ($this->fields as $key => $value) {
+            foreach ($this->fields as $value) {
                 if (str_contains($value, '_id')) {
-                    $newValue = str_replace('_id', '', $value);
-
-                    $this->$newValue = EntityFactory::make($model)->first($column, $this->$value);
+                    $newProperty = str_replace('_id', '', $value);
+                    $this->$newProperty = EntityFactory::make($model)->find($column, $this->$value);
                 }
             }
         }
