@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Resources\Controller;
+use Kernel\Resources\Controller;
 
 class EventController extends Controller
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Resources;
+namespace Kernel\Resources;
 
 class Validation
 {

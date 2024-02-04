@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Resources\Http;
+namespace Kernel\Resources\Http;
 
 class Session
 {

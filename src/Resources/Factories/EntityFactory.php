@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace Kernel\Resources\Factories;
 
-use App\Resources\Entity;
+use Kernel\Resources\Entity;
 
 class EntityFactory
 {
     public static function make(string $class): Entity
     {
-        $class = 'App\Models\\'.ucfirst($class);
+        $class = 'App\\Models\\'.ucfirst($class);
 
         return new $class();
     }

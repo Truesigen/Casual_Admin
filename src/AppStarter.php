@@ -1,12 +1,15 @@
 <?php
 
-namespace App;
+namespace Kernel;
 
-use App\Models\EntityFactory;
-use App\Resources\Container;
+use Kernel\Resources\Container;
+use Kernel\Resources\Factories\EntityFactory;
+use Kernel\Resources\Http\Server;
 
 class AppStarter
 {
+    use Server;
+
     private Container $container;
 
     public function __construct()
@@ -16,7 +19,7 @@ class AppStarter
 
     public function run(): void
     {
-        $app = EntityFactory::make('route')->find('pretty_url', strtok($_SERVER['REQUEST_URI'], '?'));
+        $app = EntityFactory::make('route')->find('pretty_url', $this->uri());
 
         if (empty($app) || ! property_exists($app, 'module')) {
             echo 'Not found';
@@ -26,11 +29,9 @@ class AppStarter
         }
 
         $module = ucfirst($app->module).'Controller';
-
-        if (file_exists(ROOT_PATH."/src/Controllers/{$module}.php")) {
+        if (file_exists(ROOT_PATH."/app/Controllers/{$module}.php")) {
             $class = 'App\Controllers\\'.$module;
-
-            $controller = new $class($app->page, $this->container->template, $this->container->validation, $this->container->redirect, $this->container->session);
+            $controller = new $class($app->page, $this->container->template, $this->container->validation, $this->container->response, $this->container->session);
             $controller->runAction($app->action);
         }
     }

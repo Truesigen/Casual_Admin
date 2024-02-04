@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Resources\Controller;
-use App\Resources\Http\Request;
 use App\Services\AuthService;
+use Kernel\Resources\Controller;
+use Kernel\Resources\Http\Request;
 
 class LoginController extends Controller
 {
@@ -30,18 +30,19 @@ class LoginController extends Controller
 
         if (! $login) {
             $this->session->setErrors($this->validation->getAllErrors());
-            $this->redirect->redirect('/login');
+
+            $this->response->redirect('/login');
         }
 
         $user = $this->service()->checkLogin($request->name, $request->password);
 
         if (! $user) {
-            $this->redirect->redirect('/login');
+            $this->response->redirect('/login');
         }
 
         $_SESSION['user_id'] = $user->id;
 
-        $this->redirect->redirect('/');
+        $this->response->redirect('/');
     }
 
     private function service(): AuthService

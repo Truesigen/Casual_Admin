@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\EntityFactory;
-use App\Resources\Controller;
+use Kernel\Resources\Controller;
 
 class ProfileController extends Controller
 {

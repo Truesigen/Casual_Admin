@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Resources;
+namespace Kernel\Resources;
 
-use App\Models\EntityFactory;
-use App\Resources\Database\SqlQueryBuilder;
+use Kernel\Resources\Database\SqlQueryBuilder;
+use Kernel\Resources\Factories\EntityFactory;
 
 abstract class Entity
 {
@@ -34,8 +34,7 @@ abstract class Entity
 
     public function find(string $fieldName, string $fieldValue): Entity
     {
-        $databaseData = $this->builder()->select($fieldName, $fieldValue, ['*'], 1)->get();
-
+        $databaseData = $this->builder()->select($fieldName, $fieldValue, limit: 1)->get();
         $this->fill($databaseData);
         $this->relations();
 
@@ -53,6 +52,7 @@ abstract class Entity
 
             return $class;
         }, $databaseData);
+        dd($models);
 
         return $models;
     }

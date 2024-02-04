@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Models\EntityFactory;
-use App\Resources\Controller;
+use Kernel\Resources\Controller;
+use Kernel\Resources\Factories\EntityFactory;
 
 class DefaultController extends Controller
 {

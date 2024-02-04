@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Resources\Entity;
+use Kernel\Resources\Entity;
 
 class Page extends Entity
 {

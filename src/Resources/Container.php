@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Resources;
+namespace Kernel\Resources;
 
-use App\Resources\Database\MysqlConnection;
-use App\Resources\Database\RedisConnection;
-use App\Resources\Http\Session;
-use App\Resources\Http\Request;
-use App\Resources\Http\Redirect;
+use Kernel\Resources\Database\MysqlConnection;
+use Kernel\Resources\Database\RedisConnection;
+use Kernel\Resources\Http\Session;
+use Kernel\Resources\Http\Request;
+use Kernel\Resources\Http\Response;
+
 
 
 class Container{
@@ -21,18 +22,18 @@ class Container{
 
     public readonly Request $request;
 
-    public readonly Redirect $redirect;
+    public readonly Response $response;
 
     public readonly Session $session;
 
     public function __construct()
     {   
         $this->db();
+        $this->response = new Response();
+        $this->request = new Request();
         $this->session = new Session();
-        $this->redirect = new Redirect();
-        $this->validation = new Validation();
         $this->template = new Template($this->session);
-        $this->request = new Request($this->validation);
+        $this->validation = new Validation();
     }
 
     private function db(): void
@@ -43,8 +44,8 @@ class Container{
         }
 
         if(!isset($this->redis)){
-            RedisConnection::connect();
-            $this->redis = RedisConnection::getRedis();
+            //RedisConnection::connect();
+            //$this->redis = RedisConnection::getRedis();
         }
     }
 

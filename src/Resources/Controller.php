@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Resources;
+namespace Kernel\Resources;
 
-use App\Resources\Http\Redirect;
-use App\Resources\Http\Request;
-use App\Resources\Http\Session;
+use Kernel\Resources\Http\Response;
+use Kernel\Resources\Http\Session;
 
 abstract class Controller
 {
-    public function __construct(protected Entity $page, protected Template $template, protected Validation $validation, protected Redirect $redirect, protected Session $session)
+    public function __construct(protected Entity $page, protected Template $template, protected Validation $validation, protected Response $response, protected Session $session)
     {
     }
 
@@ -22,7 +21,7 @@ abstract class Controller
         }
 
         if (method_exists($this, $actionName)) {
-            empty($_REQUEST) ? $this->$actionName() : call_user_func([$this, $actionName], new Request());
+            call_user_func([$this, $actionName]);
         }
     }
 

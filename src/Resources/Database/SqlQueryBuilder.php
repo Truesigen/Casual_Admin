@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Resources\Database;
+namespace Kernel\Resources\Database;
 
-use App\Resources\Entity;
+use Kernel\Resources\Entity;
 
 class SqlQueryBuilder
 {

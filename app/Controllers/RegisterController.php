@@ -2,9 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Resources\Controller;
-use App\Resources\Http\Request;
 use App\Services\AuthService;
+use Kernel\Resources\Controller;
+use Kernel\Resources\Http\Request;
 
 class RegisterController extends Controller
 {

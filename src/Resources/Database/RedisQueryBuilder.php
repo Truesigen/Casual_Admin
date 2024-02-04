@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Resources\Database;
+namespace Kernel\Resources\Database;
 
 class RedisQueryBuilder
 {

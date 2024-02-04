@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Resources;
+namespace Kernel\Resources;
 
-use App\Resources\Http\Session;
+use Kernel\Resources\Http\Session;
 
 class Template
 {
@@ -12,7 +12,7 @@ class Template
     {
     }
 
-    public function view(string $template, $variables = []): void
+    public function view(string $template, array $variables = []): void
     {
         extract(array_merge($this->extraData(), $variables));
 
