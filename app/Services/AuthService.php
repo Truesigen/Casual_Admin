@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\EntityFactory;
 use App\Models\User;
+use Kernel\Resources\Factories\EntityFactory;
 
 class AuthService
 {

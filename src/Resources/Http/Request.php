@@ -2,6 +2,8 @@
 
 namespace Kernel\Resources\Http;
 
+use Kernel\Resources\Helpers\Server;
+
 class Request
 {
     use Server;
@@ -25,12 +27,12 @@ class Request
 
     private function setInput()
     {
-        $this->properties = $this->headerHas('CONTENT_TYPE') == 'application/json' ? json_decode(file_get_contents('php://input'), true) : $_POST;
+        $this->properties = $this->headerHas('CONTENT_TYPE') == 'application/json' ? json_decode(file_get_contents('php://input'), true) : $_REQUEST;
     }
 
     public function __get(string $param): mixed
     {
-        return $_GET[$param] ?? null;
+        return $this->properties[$param] ?? null;
     }
 
     public static function make()

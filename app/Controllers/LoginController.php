@@ -11,7 +11,7 @@ class LoginController extends Controller
     public function runBeforeAction()
     {
         if ($this->session->has('user_id')) {
-            $this->redirect->redirect('/');
+            $this->response->redirect('/');
         }
 
         return true;
@@ -24,9 +24,10 @@ class LoginController extends Controller
     }
 
     //route(/sign-in)
-    public function login(Request $request)
+    public function login()
     {
-        $login = $this->validation->addRule(['required', 'min', 'max', 'emptySpaces'])->validate($request->post());
+        $request = Request::make();
+        $login = $this->validation->addRule(['required', 'min', 'max', 'emptySpaces'])->validate($request->all());
 
         if (! $login) {
             $this->session->setErrors($this->validation->getAllErrors());

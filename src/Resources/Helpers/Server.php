@@ -1,6 +1,6 @@
 <?php
 
-namespace Kernel\Resources\Http;
+namespace Kernel\Resources\Helpers;
 
 trait Server
 {
@@ -9,7 +9,7 @@ trait Server
         return $_SERVER['REQUEST_METHOD'];
     }
 
-    public function uri(): string
+    public function uri()
     {
         $uri = strtok($_SERVER['REQUEST_URI'], '?');
 

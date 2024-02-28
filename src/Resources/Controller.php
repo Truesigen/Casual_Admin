@@ -2,16 +2,13 @@
 
 namespace Kernel\Resources;
 
-use Kernel\Resources\Http\Response;
-use Kernel\Resources\Http\Session;
-
 abstract class Controller
 {
-    public function __construct(protected Entity $page, protected Template $template, protected Validation $validation, protected Response $response, protected Session $session)
+    public function __construct(protected Container $container)
     {
     }
 
-    public function runAction(string $actionName)
+    final public function runAction(array $action)
     {
         if (method_exists($this, 'runBeforeAction')) {
             $result = $this->runBeforeAction();
@@ -20,14 +17,13 @@ abstract class Controller
             }
         }
 
-        if (method_exists($this, $actionName)) {
-            call_user_func([$this, $actionName]);
+        if (method_exists($this, $action[0])) {
+            call_user_func([$this, $action[0]], $action[1]);
         }
     }
 
-    protected function assignPage(array $pageData = []): void
+    protected function assignPage(string $view, array $pageData = []): void
     {
-        $this->template->title($this->page->title);
-        $this->template->view($this->page->template, $pageData);
+        $this->container->template->view($view, $pageData);
     }
 }

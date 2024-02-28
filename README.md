@@ -1,2 +1,1 @@
-# mini CRM
-with Love
+Pet project, the idea not completed yet

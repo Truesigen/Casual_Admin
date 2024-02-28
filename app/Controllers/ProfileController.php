@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Models\EntityFactory;
 use Kernel\Resources\Controller;
+use Kernel\Resources\Factories\EntityFactory;
 
 class ProfileController extends Controller
 {

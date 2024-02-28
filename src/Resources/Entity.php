@@ -35,8 +35,10 @@ abstract class Entity
     public function find(string $fieldName, string $fieldValue): Entity
     {
         $databaseData = $this->builder()->select($fieldName, $fieldValue, limit: 1)->get();
-        $this->fill($databaseData);
-        $this->relations();
+        if (isset($databaseData) && $databaseData != 0) {
+            $this->fill($databaseData);
+            $this->relations();
+        }
 
         return $this;
     }
@@ -52,7 +54,6 @@ abstract class Entity
 
             return $class;
         }, $databaseData);
-        dd($models);
 
         return $models;
     }

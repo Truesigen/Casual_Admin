@@ -10,7 +10,7 @@ class DefaultController extends Controller
     //route(/)
     public function index()
     {
-        $this->assignPage(['events' => EntityFactory::make('event')->all()]);
+        $this->assignPage('default', ['events' => EntityFactory::make('event')->all()]);
     }
 
     //route(/logout)

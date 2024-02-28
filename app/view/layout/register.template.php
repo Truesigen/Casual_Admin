@@ -4,9 +4,9 @@
 		<meta charset="utf-8">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">  
-	    <title><?php echo $view->getTitle()?></title>
-	    <link href="/assets/bootstrap.min.css" rel="stylesheet">
-	    <link href="/assets/templatemo-style.css" rel="stylesheet">
+	    <title>Casual_admin</title>
+	    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+	    <link href="/assets/css/templatemo-style.css" rel="stylesheet">
 	</head>
 	<body class="light-gray-bg">
 		<div class="templatemo-content-widget templatemo-login-widget white-bg">

@@ -1,4 +1,5 @@
  <?php $view->component('start'); ?>
+
     <div class="panel panel-default templatemo-content-widget white-bg no-padding templatemo-overflow-hidden">
                 <div class="panel-heading templatemo-position-relative"><h2 class="text-uppercase">Event list</h2></div>
                 <div class="table-responsive">
@@ -20,5 +21,5 @@
                     </tbody>
                   </table>    
                 </div>                          
-              </div>           
+              </div>          
     <?php $view->component('end') ?>

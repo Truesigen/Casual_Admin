@@ -5,22 +5,23 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">  
-    <title><?php echo $view->getTitle(); ?></title>
-    <link href="/assets/bootstrap.min.css" rel="stylesheet">
-    <link href="/assets/templatemo-style.css" rel="stylesheet">
+    <title>Casual_admin</title>
+    <link href="/assets/css/font-awesome/css/all.min.css" rel="stylesheet">
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/templatemo-style.css" rel="stylesheet">
   </head>
-  <body>  
+  <body>
     <!-- Left column -->
     <div class="templatemo-flex-row">
       <div class="templatemo-sidebar">
         <header class="templatemo-site-header">
           <div class="square"></div>
           <h1>Casual Admin</h1>
-        </header>  
+        </header> 
         <nav class="templatemo-left-nav">          
           <ul>
-            <li><a href="/" class="active"><i class="fa fa-home fa-fw"></i>Dashboard</a></li>
-            <li><a href="/event/new"><i class="fa fa-bar-chart fa-fw"></i>Create Event</a></li>
+            <li><a href="/" class="active"><i class="fas fa-yen-sign"></i></i>Dashboard</a></li>
+            <li><a href="/event/new"><i class="fas fa-wrench"></i>Create Event</a></li>
             <li><a href="/event/explore"><i class="fa fa-database fa-fw"></i>Event Visualization</a></li>
             <li><a href="/profile/"><i class="fa fa-users fa-fw"></i>Manage Profile</a></li>
             <?php

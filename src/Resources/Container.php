@@ -7,6 +7,7 @@ use Kernel\Resources\Database\RedisConnection;
 use Kernel\Resources\Http\Session;
 use Kernel\Resources\Http\Request;
 use Kernel\Resources\Http\Response;
+use Kernel\Resources\Routing\Router;
 
 
 
@@ -26,12 +27,15 @@ class Container{
 
     public readonly Session $session;
 
+    public readonly Router $router;
+
     public function __construct()
     {   
         $this->db();
         $this->response = new Response();
         $this->request = new Request();
         $this->session = new Session();
+        $this->router = new Router();
         $this->template = new Template($this->session);
         $this->validation = new Validation();
     }
