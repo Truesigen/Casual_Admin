@@ -2,41 +2,42 @@
 
 namespace Kernel\Resources\Http;
 
-use Kernel\Resources\Helpers\Server;
+use AllowDynamicProperties;
 
+#[AllowDynamicProperties]
 class Request
 {
-    use Server;
+    public array $queryString;
 
-    private array $properties = [];
+    public array $input = [];
 
-    public function __construct()
+    public function __construct(bool $apiRequest)
     {
-        $this->setInput();
+        $this->setInput($apiRequest);
     }
-
-   public function all(): array
-   {
-       return $this->properties;
-   }
 
     public function has(string $key): bool
     {
-        return isset($this->properties[$key]);
+        return isset($this->input[$key]);
     }
 
-    private function setInput()
+    private function setInput(bool $apiRequest)
     {
-        $this->properties = $this->headerHas('CONTENT_TYPE') == 'application/json' ? json_decode(file_get_contents('php://input'), true) : $_REQUEST;
+
+        $this->queryString = $_GET;
+        $input = $apiRequest ? json_decode(file_get_contents('php://input'), true) : $_POST;
+
+        if (isset($input) && ! empty($input)) {
+
+            foreach ($input as $key => $value) {
+                $this->$key = $value;
+                $this->input[$key] = $value;
+            }
+        }
     }
 
-    public function __get(string $param): mixed
+    public function input()
     {
-        return $this->properties[$param] ?? null;
-    }
-
-    public static function make()
-    {
-        return new static();
+        return $this->input;
     }
 }

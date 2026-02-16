@@ -3,43 +3,41 @@
 namespace Kernel\Resources\Routing;
 
 use Kernel\Resources\Container;
-use Kernel\Resources\Helpers\ConfigurationMaster;
-use Kernel\Resources\Helpers\Server;
+use Kernel\Resources\Exceptions\RouteNotFoundException;
 
 class Router
 {
-    use Server;
+    public function __construct(public readonly Container $container) {}
 
-    private RouteMatcher $matcher;
-
-    public function __construct()
+    public function dispatch(array $source)
     {
-        $this->matcher = new RouteMatcher;
+        [$route, $id] = $this->getRoute($source);
+
+        [$controller, $action] = $route->controller();
+
+        $controller = $this->container->makeController($controller);
+
+        call_user_func([$controller, 'runAction'], [$action, $id]);
     }
 
-    public function dispatch(Container $container)
+    public function getRoute(array $source)
     {
-        $routes = $this->getRoutes();
+        $routes = require ROOT_PATH.'/src/routes/routes.php';
 
-        $matcher = $this->matcher->matchMaking($routes, $this->uri());
+        [$http, $method, $url] = $source;
 
-        if (! $matcher->equels) {
-            echo 'not found';
-            http_response_code(404);
-            exit;
+        if (array_key_exists($method, $routes[$http])) {
+            $routes = $routes[$http][$method];
+
+            foreach ($routes as $route) {
+                if (preg_match($route->url(), $url, $matched)) {
+                    $id = $matched[1] ?? null;
+
+                    return [$route, $id];
+                }
+            }
         }
 
-        [$controller, $action] = $matcher->route->controller();
-
-        $controller = new $controller($container);
-
-        call_user_func([$controller, 'runAction'], [$action, $matcher->queryParam]);
-    }
-
-    private function getRoutes()
-    {
-        $path = 'routes.web.'.$this->method();
-
-        return ConfigurationMaster::get($path);
+        throw new RouteNotFoundException;
     }
 }

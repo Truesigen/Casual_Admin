@@ -12,7 +12,7 @@ final class ConfigurationMaster
     {
         $path = explode('.', $path);
 
-        self::$configFilePath = '../src/config/'.array_shift($path).'.php';
+        self::$configFilePath = './src/config/'.array_shift($path).'.php';
 
         self::$configFile = file_exists(self::$configFilePath) ? include self::$configFilePath : false;
 
@@ -28,5 +28,12 @@ final class ConfigurationMaster
         }
 
         return self::$configFile;
+    }
+
+    public static function config(string $configuration)
+    {
+        $env = parse_ini_file(ROOT_PATH.'/.env');
+
+        return $env[$configuration] ?? null;
     }
 }

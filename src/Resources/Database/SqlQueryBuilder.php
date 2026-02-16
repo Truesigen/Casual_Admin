@@ -2,105 +2,131 @@
 
 namespace Kernel\Resources\Database;
 
-use Kernel\Resources\Entity;
+use Kernel\Resources\Exceptions\ModelNotFoundException;
 
 class SqlQueryBuilder
 {
     private \PDO $dbc;
 
-    private array $entityFields;
-
     private string $table;
+
+    private mixed $valuesForDb = [];
 
     private string $query;
 
-    private $fetchedData = [];
+    private string $entity;
 
-    public function __construct($table, $entityFields)
+    private \PDOStatement $stmt;
+
+    public function __construct(string $table, string $entity)
     {
         $this->table = $table;
-        $this->entityFields = $entityFields;
+        $this->entity = $entity;
         $this->dbc = MysqlConnection::getConnection();
     }
 
-    public function select(string $field, string $value, array $columns = ['*'], int $limit = null): SqlQueryBuilder
+    public function select(array $columns = ['*'])
     {
-        $columns = implode(', ', array_values($columns));
-        $field = in_array($field, $this->entityFields) ? $field : null;
+        $columns = implode(',', $columns);
 
-        $this->query = "SELECT $columns FROM  $this->table WHERE $field = ?";
+        $this->query = "SELECT {$columns} FROM {$this->table}";
 
-        if (isset($limit)) {
-            $this->query .= " LIMIT $limit";
+        return $this;
+    }
+
+    public function where(string $field, string $operator, string $value): SqlQueryBuilder
+    {
+
+        $this->query .= " WHERE $field $operator ?";
+        $this->valuesForDb = [$value];
+
+        return $this;
+    }
+
+    public function limit(int $limit = 1)
+    {
+        $this->query .= " LIMIT $limit";
+
+        return $this;
+    }
+
+    public function insert(array $insert): SqlQueryBuilder|false
+    {
+        if (empty($insert)) {
+            return false;
         }
 
-        $stmt = $this->fetch([$value]);
-        $this->fetchedData = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $fieldsName = implode(', ', array_keys($insert));
+        $placeholders = implode(', ', array_map(fn ($data) => '?', $insert));
+        $this->query = "INSERT INTO $this->table ({$fieldsName}) VALUES ({$placeholders})";
+        $this->valuesForDb = array_values($insert);
 
         return $this;
+
     }
 
-    public function selectAll(): SqlQueryBuilder
+    public function update($id, array $update): SqlQueryBuilder|false
     {
-        $this->query = "SELECT * FROM $this->table";
-        $stmt = $this->fetch();
-        $this->fetchedData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-        return $this;
-    }
-
-    public function insert(Entity $entity): SqlQueryBuilder
-    {
-        $massive = [];
-
-        foreach ($this->entityFields as $value) {
-            if (property_exists($entity, $value)) {
-                $massive[$value] = $entity->$value;
-            }
+        if (empty($update)) {
+            return false;
         }
 
-        $fieldsName = implode(', ', array_keys($massive));
-        $placeholders = implode(', ', array_map(fn ($data) => '?', $massive));
+        $fieldsName = implode(', ', array_map(fn ($data) => "$data = ?", array_keys($update)));
+        $this->query = "UPDATE {$this->table} SET {$fieldsName}  WHERE id = $id";
+        $this->valuesForDb = array_values($update);
 
-        $this->query = "INSERT INTO $this->table ($fieldsName) VALUES ($placeholders)";
+        return $this;
 
-        $this->fetch(array_values($massive));
+    }
+
+    public function getLastInsertId(): string|false
+    {
+        return $this->dbc->lastInsertId();
+    }
+
+    public function delete($id)
+    {
+        $this->query = "DELETE FROM $this->table WHERE id = $id";
 
         return $this;
     }
 
-    public function update(): SqlQueryBuilder
-    {
-        $fieldsName = implode(', ', array_map(fn ($data) => "$data = ?", $this->entityFields));
-        $fieldsValue = array_map(fn ($data) => $this->$data, $this->entityFields);
-
-        $sql = "UPDATE $this->tableName SET $fieldsName WHERE id = $fieldsValue[0]";
-
-        $this->fetch($fieldsValue);
-
-        return $this;
-    }
-
-    public function delete()
-    {
-        //TODO DELETE
-        $this->query = "DELETE FROM $this->table WHERE";
-    }
-
-    public function get(): array|int
-    {
-        return empty($this->fetchedData) ? $this->dbc->lastInsertId() : $this->fetchedData;
-    }
-
-    private function fetch(array $properties = []): \PDOStatement
+    public function execute()
     {
         $stmt = $this->dbc->prepare($this->query);
+
         try {
-            $stmt->execute($properties);
-        } catch(\PDOException $exception) {
-            echo $exception->getMessage();
+            $stmt->execute($this->valuesForDb);
+        } catch (\PDOException $e) {
+            echo $e->getMessage();
         }
 
-        return $stmt;
+        if (str_starts_with($stmt->queryString, 'SELECT') && $stmt->rowCount() == 0) {
+            throw new ModelNotFoundException(basename(str_replace('\\', '/', $this->entity)).' not found ');
+        }
+
+        $this->stmt = $stmt;
+
+        return $this;
+    }
+
+    public function get(): array
+    {
+        $fetchedData = [];
+        while ($row = $this->stmt->fetch()) {
+            $model = new $this->entity;
+            $model->assemblingEntity($row);
+            $fetchedData[] = $model;
+        }
+
+        return $fetchedData;
+    }
+
+    public function first()
+    {
+        $model = new $this->entity;
+        $model->assemblingEntity($this->stmt->fetch());
+
+        return $model;
     }
 }

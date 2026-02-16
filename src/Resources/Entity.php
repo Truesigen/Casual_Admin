@@ -2,42 +2,66 @@
 
 namespace Kernel\Resources;
 
+use AllowDynamicProperties;
 use Kernel\Resources\Database\SqlQueryBuilder;
-use Kernel\Resources\Factories\EntityFactory;
 
+#[AllowDynamicProperties]
 abstract class Entity
 {
-    protected string $tableName;
+    protected string $table;
 
     protected array $fields;
 
-    protected function __construct(string $tableName)
+    public array $original = [];
+
+    public function __construct() {}
+
+    public function builder(): SqlQueryBuilder
     {
-        $this->initFields();
-        $this->tableName = $tableName;
+        return new SqlQueryBuilder($this->table, static::class);
     }
 
-    private function builder(): SqlQueryBuilder
+    public function save()
     {
-        return new SqlQueryBuilder($this->tableName, $this->fields);
-    }
 
-    public function save(): int
-    {
-        return $this->builder()->insert(clone $this)->get();
+        $insert = [];
+        foreach ($this->fields as $value) {
+            if (property_exists($this, $value)) {
+                $insert[$value] = $this->$value;
+            }
+        }
+
+        return $this->builder()->insert($insert)->execute()->getLastInsertId();
     }
 
     public function update()
     {
-        return $this->builder()->update()->get();
+        $update = [];
+
+        foreach ($this->fields as $value) {
+            if (property_exists($this, $value) && $this->original[$value] != $this->$value) {
+                $update[$value] = $this->$value;
+
+            }
+        }
+
+        $this->builder()->update($this->id, $update)->execute();
+
+        return $this->find($this->id);
     }
 
-    public function find(string $fieldName, string $fieldValue): Entity
+    public function delete()
     {
-        $databaseData = $this->builder()->select($fieldName, $fieldValue, limit: 1)->get();
-        if (isset($databaseData) && $databaseData != 0) {
-            $this->fill($databaseData);
-            $this->relations();
+        return $this->builder()->delete($this->id)->execute();
+    }
+
+    public function fill(array $values): Entity
+    {
+
+        foreach ($this->fields as $field) {
+            if (array_key_exists($field, $values)) {
+                $this->$field = $values[$field];
+            }
         }
 
         return $this;
@@ -45,45 +69,39 @@ abstract class Entity
 
     public function all(): array
     {
-        $databaseData = $this->builder()->selectAll()->get();
-
-        $models = array_map(function ($data) {
-            $className = static::class;
-            $class = new $className();
-            $class->fill($data);
-
-            return $class;
-        }, $databaseData);
-
-        return $models;
+        return $this->builder()->select()->execute()->get();
     }
 
-    public function fill(array $values): Entity
+    public function find($id): Entity
     {
-        foreach ($this->fields as $item) {
-            if (isset($values[$item])) {
-                $this->$item = $values[$item];
-            }
+        return $this->builder()->select()->where('id', '=', $id)->execute()->first();
+    }
+
+    public function toJson()
+    {
+        return $this->original;
+    }
+
+    public function assemblingEntity(array $dbValues): Entity
+    {
+        foreach ($dbValues as $key => $value) {
+            $this->$key = $value;
+            $this->original[$key] = $value;
         }
 
         return $this;
     }
 
-    public function relations(): void
+    protected function hasOne(string $model, string $column, string $localKey)
     {
-        if (method_exists($this, 'hasOne')) {
-            [$model, $column] = $this->hasOne();
+        if (in_array($localKey, $this->fields)) {
+            $newProperty = str_replace('_id', '', $localKey);
 
-            foreach ($this->fields as $value) {
-                if (str_contains($value, '_id')) {
-                    $newProperty = str_replace('_id', '', $value);
-                    $this->$newProperty = EntityFactory::make($model)->find($column, $this->$value);
-                }
-            }
+            $this->$newProperty = (new $model)->builder()->select()->where($column, '=', $this->$localKey)->execute()->first();
         }
-    }
 
-    abstract protected function initFields(): void;
+        return $this;
+    }
 }
 ?>
    

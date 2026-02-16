@@ -6,7 +6,7 @@
         }
     },
     "require": {
-        "php": "8.0.18"
+        "php": "^8.0.18"
     },
     "require-dev": {
         "symfony/var-dumper": "^6.0",

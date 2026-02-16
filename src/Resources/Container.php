@@ -4,22 +4,17 @@ namespace Kernel\Resources;
 
 use Kernel\Resources\Database\MysqlConnection;
 use Kernel\Resources\Database\RedisConnection;
-use Kernel\Resources\Http\Session;
 use Kernel\Resources\Http\Request;
 use Kernel\Resources\Http\Response;
-use Kernel\Resources\Routing\Router;
+use Kernel\Resources\Http\Session;
 
-
-
-class Container{
-
+class Container
+{
     public readonly MysqlConnection $mysql;
 
-    public readonly \Redis $redis;
+    public readonly RedisConnection $redis;
 
-    public readonly Template $template;
-
-    public readonly Validation $validation;
+    public readonly Validator $validator;
 
     public readonly Request $request;
 
@@ -27,30 +22,45 @@ class Container{
 
     public readonly Session $session;
 
-    public readonly Router $router;
+    public readonly Template $template;
 
-    public function __construct()
-    {   
-        $this->db();
-        $this->response = new Response();
-        $this->request = new Request();
-        $this->session = new Session();
-        $this->router = new Router();
-        $this->template = new Template($this->session);
-        $this->validation = new Validation();
+    public readonly Server $server;
+
+    public function __construct(Server $server)
+    {
+        $this->server = $server;
+        $this->response = new Response;
+        $this->request = new Request($this->server->isApi());
+        $this->validator = new Validator;
+        if (! $this->server->isApi()) {
+            $this->session = new Session;
+            $this->template = new Template($this->session);
+        }
     }
 
-    private function db(): void
+    public function db(): void
     {
-        if(!isset($this->mysql)){
+        if (! isset($this->mysql)) {
             MysqlConnection::connect();
             $this->mysql = MysqlConnection::getInstance();
         }
 
-        if(!isset($this->redis)){
-            //RedisConnection::connect();
-            //$this->redis = RedisConnection::getRedis();
+        if (! isset($this->redis)) {
+            // RedisConnection::connect();
+            // $this->redis = RedisConnection::getRedis();
         }
     }
 
+    public function makeController(string $controller): Controller
+    {
+        $object = new $controller;
+
+        $object->setRequest($this->request);
+        $object->setResponse($this->response);
+        $object->setValidator($this->validator);
+        $object->setSession($this->session ?? null);
+        $object->setTemplate($this->template ?? null);
+
+        return $object;
+    }
 }
