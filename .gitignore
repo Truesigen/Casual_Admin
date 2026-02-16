@@ -1,5 +1,11 @@
 .vscode/
+.DS_Store
 /vendor/
 admin/theme/
 .env
 config.ini
+app/Controllers/*
+app/Models/*
+app/Repositories/*
+app/Services/*
+app/view/*
