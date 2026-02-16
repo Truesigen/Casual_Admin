@@ -1,7 +1,6 @@
 .vscode/
 .DS_Store
 /vendor/
-admin/theme/
 .env
 config.ini
 app/Controllers/*
